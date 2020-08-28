@@ -1,5 +1,6 @@
 const sheetsInterface = require("./sheetsInterface");
 const database = require("./firebase");
+const counter = require("./counter");
 
 const objectToArray = (object, callback) => {
   let array = [];
@@ -25,7 +26,7 @@ async function main() {
     const applicants = (await database.getRef("applicants")).val();
     if (applicants === null) {
       console.log("No applicants found in DB");
-      schedule();
+      counter(15, "Starting main function in", main);
     } else {
       await database
         .setRef("/synced", applicants)
@@ -44,19 +45,12 @@ async function main() {
       sheetsInterface.update(
         "1NPXfUfrvL6c5jXCobQFYqcd48rvg0402_pXj-5f22Bw",
         values,
-        () => schedule()
+        () => counter(15, "Starting main function in", main)
       );
     }
   } catch (err) {
     console.log(err);
   }
-}
-
-function schedule() {
-  console.log("Starting main function in 15s");
-  setInterval(function() {
-    main();
-  }, 15000);
 }
 
 main();
