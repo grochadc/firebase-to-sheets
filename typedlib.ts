@@ -1,9 +1,9 @@
-function getNextItem(arr, el) {
-  var index = arr.indexOf(el);
+function getNextItem(arr: string[], el: string): string {
+  const index: number = arr.indexOf(el);
   if (index < 0) {
     throw new Error("Element is not in array");
   }
-  var nextel;
+  let nextel: string;
   if (index === arr.length - 1) {
     nextel = arr[0];
   } else {
@@ -11,15 +11,19 @@ function getNextItem(arr, el) {
   }
   return nextel;
 }
-var objectToArray = function(obj) {
-  var array = [];
-  Object.keys(obj).forEach(function(key) {
-    return array.push(obj[key]);
-  });
+
+const objectToArray = (obj: object): any[] => {
+  let array = [];
+  Object.keys(obj).forEach(key => array.push(obj[key]));
   return array;
 };
-function makeObjFromProperty(container, obj, prop) {
-  var newKey = obj[prop];
+
+function makeObjFromProperty(
+  container: object,
+  obj: object,
+  prop: string
+): object {
+  let newKey: string = obj[prop];
   if (container.hasOwnProperty(newKey)) {
     if (Array.isArray(container[newKey])) {
       container[newKey].push(obj);
@@ -31,9 +35,3 @@ function makeObjFromProperty(container, obj, prop) {
   }
   return container;
 }
-
-module.exports = {
-  objectToArray,
-  makeObjFromProperty,
-  getNextItem
-};

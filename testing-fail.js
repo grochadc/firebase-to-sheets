@@ -7,7 +7,7 @@ function request(auth, spreadsheet, values, callback) {
   const request = {
     spreadsheetId,
     auth,
-    range: "Today!A1",
+    range: "Testing!A1",
     valueInputOption: "RAW",
     resource: { values: values }
   };
@@ -26,26 +26,4 @@ function update(sheet, vals, callback) {
   getSpreadSheet(auth => request(auth, sheet, vals, callback));
 }
 
-module.exports = { update };
-
-/*
-sheets.spreadsheets.values.get(
-  {
-    spreadsheetId: "1NPXfUfrvL6c5jXCobQFYqcd48rvg0402_pXj-5f22Bw",
-    range: "Sheet1!A1"
-  },
-  (err, res) => {
-    if (err) return console.log("The API returned an error: " + err);
-    const rows = res.data.values;
-    if (rows.length) {
-      console.log("Name, Major:");
-      // Print columns A and E, which correspond to indices 0 and 4.
-      rows.map(row => {
-        console.log(`${row[0]}, ${row[4]}`);
-      });
-    } else {
-      console.log("No data found.");
-    }
-  }
-);
-*/
+update("null", ["one", "two"], () => console.log("Finished"));

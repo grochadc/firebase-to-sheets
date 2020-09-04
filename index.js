@@ -1,8 +1,9 @@
+const fs = require("fs");
 const sheetsInterface = require("./sheetsInterface");
 const database = require("./firebase");
 const counter = require("./counter");
 
-const objectToArray = (object, callback) => {
+const objectToArray = object => {
   let array = [];
   Object.keys(object).forEach(key => array.push(object[key]));
   return array;
@@ -19,38 +20,60 @@ const objectToArray = (object, callback) => {
 * @endpoint: spreadsheet ID
 * @values: two dimensional array of values
 */
+const now = new Date();
+let stream = fs.createWriteStream(
+  `logs/${now.getFullYear()}_${now.getMonth()}_${now.getDate()}_${now.getHours()}.${now.getMinutes()}.${now.getSeconds()}-logs.json`,
+  { flags: "a" }
+);
 
-async function main() {
-  console.log("Starting main function");
-  try {
-    const applicants = (await database.getRef("applicants")).val();
-    if (applicants === null) {
-      console.log("No applicants found in DB");
-      counter(15, "Starting main function in", main);
-    } else {
-      await database
-        .setRef("/synced", applicants)
-        .then(() => database.setRef("/applicants", null));
-      console.log(applicants);
-      const values = objectToArray(applicants).map(applicant => [
-        applicant.applicantCode,
-        applicant.code,
-        applicant.firstName,
-        applicant.firstLastName,
-        applicant.secondLastName,
-        applicant.meetLink,
-        applicant.level
-      ]);
+stream.on("open", () => {
+  stream.write("[");
 
-      sheetsInterface.update(
-        "1NPXfUfrvL6c5jXCobQFYqcd48rvg0402_pXj-5f22Bw",
-        values,
-        () => counter(15, "Starting main function in", main)
-      );
+  async function main() {
+    console.log("Starting main function");
+    try {
+      const applicants = (await database.getRef("applicants")).val();
+      if (applicants === null) {
+        console.log("No applicants found in DB");
+        counter(15, "Starting main function in", main);
+      } else {
+        let now = new Date();
+        const endpoint = `synced/${now.getTime()}`;
+        await database
+          .setRef(endpoint, applicants)
+          .then(() => database.setRef("/applicants", null));
+        console.log(applicants);
+        stream.write(`${JSON.stringify(applicants)},`);
+        const values = objectToArray(applicants).map(applicant => [
+          new Date().toGMTString(),
+          applicant.applicantCode,
+          applicant.code,
+          applicant.firstName,
+          applicant.firstLastName,
+          applicant.secondLastName,
+          applicant.meetLink,
+          applicant.phone,
+          applicant.email,
+          applicant.level
+        ]);
+
+        sheetsInterface.update(
+          "1NPXfUfrvL6c5jXCobQFYqcd48rvg0402_pXj-5f22Bw",
+          values,
+          () => counter(15, "Starting main function in", main)
+        );
+      }
+    } catch (err) {
+      console.log(err);
     }
-  } catch (err) {
-    console.log(err);
   }
-}
 
-main();
+  main();
+});
+
+process.on("SIGINT", () => {
+  console.log("\nInterrupting process\n");
+  stream.write("]");
+  stream.end();
+  process.exit();
+});

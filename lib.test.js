@@ -1,57 +1,21 @@
-const { objectToArray, makeObjFromProperty } = require("./lib");
-
-const applicants = [
-  {
-    applicantCode: "nox2qgi",
-    carrera: "",
-    code: "",
-    course: "english",
-    curso: "english",
-    email: "m@m.com",
-    external: true,
-    firstLastName: "Paramo",
-    firstName: "Miguel",
-    level: 2,
-    meetLink: "ym-djkh-kmc",
-    phone: "3412345678",
-    reubicacion: false,
-    secondLastName: "Garcia"
-  },
-  {
-    applicantCode: "9mh2p4n",
-    carrera: "",
-    code: "",
-    course: "english",
-    curso: "english",
-    email: "m@m.com",
-    external: true,
-    firstLastName: "Preciado",
-    firstName: "Juan",
-    level: 2,
-    meetLink: "jao-wiqv-kmn",
-    phone: "3414567890",
-    reubicacion: false,
-    secondLastName: "Renteria"
-  }
-];
-
-/*
-let links = {};
-
-if (links.hasOwnProperty(applicants[0].meetLink)) {
-  if (Array.isArray(links[applicants[0].meetLink])) {
-    links[applicants[0].meetLink].push(applicants[0]);
-    console.log(links);
-  } else {
-    console.error(new Error("The property was not an array"));
-  }
-} else {
-  console.error(new Error("No property found"));
-}
-*/
+const { objectToArray, makeObjFromProperty, getNextItem } = require("./lib");
 
 test("Converts an object to an array of its values", () => {
   expect(objectToArray({ a: "a", b: "b" })).toStrictEqual(["a", "b"]);
+});
+
+describe("Gets an array and an item from the array and returns the next item in the arr", () => {
+  test("First item in array", () => {
+    expect(getNextItem(["a", "b", "c"], "a")).toBe("b");
+  });
+  test("Last item in array", () => {
+    expect(getNextItem(["a", "b", "c"], "c")).toBe("a");
+  });
+  test("Item not found in array", () => {
+    expect(() => getNextItem(["a", "b"], "c")).toThrow(
+      "Element is not in array"
+    );
+  });
 });
 
 describe("makeObjFromProperty returns an obj with an array of objs based on a prop", () => {
