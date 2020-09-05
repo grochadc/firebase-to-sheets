@@ -1,1 +1,1 @@
-web: touch logs/ && node index.js
+web: mkdir logs/ && node index.js
