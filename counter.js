@@ -1,8 +1,8 @@
 function counter(seconds, msg, callback) {
-  console.log('NODE_ENV', process.NODE_ENV);
+  const enviroment =  process.env.NODE_ENV;
   let counter = seconds;
   const interval = setInterval(() => {
-    if(process.NODE_ENV === "production"){
+    if(enviroment === "production"){
       console.log('Starting counter!');
     } else {
       process.stdout.clearLine();
@@ -12,7 +12,7 @@ function counter(seconds, msg, callback) {
     counter--;
     if (counter < 0) {
       clearInterval(interval);
-      if(process.NODE_ENV === "production"){
+      if(enviroment ===  "production"){
         console.log('Starting callback');
       } else {
         process.stdout.clearLine();
