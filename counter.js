@@ -1,4 +1,5 @@
 function counter(seconds, msg, callback) {
+  console.log('NODE_ENV', process.NODE_ENV);
   let counter = seconds;
   const interval = setInterval(() => {
     if(process.NODE_ENV === "production"){
