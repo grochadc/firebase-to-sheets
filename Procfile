@@ -1,1 +1,1 @@
-web: mkdir logs/ && node index.js
+worker: mkdir logs/ && node index.js

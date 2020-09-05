@@ -3,7 +3,9 @@ function counter(seconds, msg, callback) {
   let counter = seconds;
   const interval = setInterval(() => {
     if(enviroment === "production"){
-      console.log('Starting counter!');
+      if(counter === 15){
+      console.log('Starting counter!');  
+      }
     } else {
       process.stdout.clearLine();
       process.stdout.cursorTo(0);
