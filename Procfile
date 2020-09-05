@@ -1,1 +1,1 @@
-web: node index.js
+web: touch logs/ && node index.js
