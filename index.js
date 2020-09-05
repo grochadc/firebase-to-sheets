@@ -3,6 +3,19 @@ const sheetsInterface = require("./sheetsInterface");
 const database = require("./firebase");
 const counter = require("./counter");
 
+
+teachers = {
+"kzx-emdw-tac":	"Sergio",
+"ucv-dwyu-reh":	"Flor",
+"zym-djkh-kmc":	"Chuck",
+"huz-dbiq-hry":	"Alondra",
+"wqf-dmjq-qza":	"Gissel",
+"dkg-zqni-phx":	"Zullet",
+"jvp-ijky-bjy":	"Eri",
+"xni-zart-qav":	"Felipe",
+"baw-iuzn-mbj":	"Jessica",
+"jao-wiqv-kmn":	"Jis"
+}
 const objectToArray = object => {
   let array = [];
   Object.keys(object).forEach(key => array.push(object[key]));
@@ -54,6 +67,7 @@ stream.on("open", () => {
           applicant.meetLink,
           applicant.phone,
           applicant.email,
+          teachers[applicant.meetLink],
           applicant.level
         ]);
 
